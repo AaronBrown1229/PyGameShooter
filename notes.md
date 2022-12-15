@@ -44,3 +44,4 @@
 5. did geometry stuff to make gun fallow mouse
 6. made it for gun inverses if on left side of screen
 7. made it detect clicks and draw circles at the mouse if click happens
+8. made gun scale down when imported

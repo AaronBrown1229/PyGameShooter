@@ -27,7 +27,7 @@ all assets are in the assets file
 - [x] 1. import and set up pygame
 - [x] 2. import images
 - [x] 3. draw static background images
-- [] 4. draw gun
+- [x] 4. draw gun
 - [] 5. make gun rotate based on mouse position
 - [] 6. add enemy into game 
 - [] 7. procedarly generate enemy starting location

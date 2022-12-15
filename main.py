@@ -24,7 +24,8 @@ level = 1
 for i in range(1, 4):
     bgs.append(pygame.image.load(f'assets/bgs/{i}.png'))
     banners.append(pygame.image.load(f'assets/banners/{i}.png'))
-    guns.append(pygame.image.load(f'assets/guns/{i}.png'))
+    # makes gun smaller
+    guns.append(pygame.transform.scale(pygame.image.load(f'assets/guns/{i}.png'), (100, 100)))
 
 
 def draw_gun():
