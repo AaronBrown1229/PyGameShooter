@@ -23,9 +23,9 @@ target_images = [[]] * 3
 targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
-level = 1
-NUMBER_OF_LEVELS = 3
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
+level = 2
+NUMBER_OF_LEVELS = 3
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
 for i in range(1, NUMBER_OF_LEVELS + 1):
@@ -34,7 +34,7 @@ for i in range(1, NUMBER_OF_LEVELS + 1):
     # makes gun smaller
     guns.append(pygame.transform.scale(pygame.image.load(f'assets/guns/{i}.png'), (100, 100)))
     # loads the targets
-    number_of_targets = NUMBER_OF_TARGETS_ARRAY[i]
+    number_of_targets = NUMBER_OF_TARGETS_ARRAY[i - 1]
     # for target in folder
     for j in range(1, number_of_targets + 1):
         # will make images smaller for each level
@@ -79,13 +79,35 @@ def draw_gun():
                 pygame.draw.circle(screen, lasers[level - 1], mouse_pos, 5)
 
 
-def draw_level():
-    if level == 1 or level ==2:
-        # target hit box
-        target_rects = [[]] * 3
-    else:
-        # for level 3 because it has 4 enemies
-        target_rects = [[]] * 4
+def draw_level(coords):
+    number_of_targets = NUMBER_OF_TARGETS_ARRAY[level - 1]
+    # target hit box
+    target_rects = [[]] * number_of_targets
+    # x loop
+    for i in range(len(coords)):
+        # y loop
+        for j in range(len(coords[i])):
+            target_rects[i].append(pygame.rect.Rect((coords[i][j][0] + 20, coords[i][j][1]), (60- i*12, 60 - i*12)))
+            screen.blit(target_images[level-1][i], coords[i][j])
+    return target_rects
+
+
+# initialize enemy coordinates
+# variate from tutorial so may cause errors
+one_coords = [[]] * NUMBER_OF_TARGETS_ARRAY[0]
+two_coords = [[]] * NUMBER_OF_TARGETS_ARRAY[1]
+three_coords = [[]] * NUMBER_OF_TARGETS_ARRAY[2]
+for k in range(NUMBER_OF_LEVELS):
+    for i in range(NUMBER_OF_TARGETS_ARRAY[k]):
+        my_list = targets[k+1]
+        for j in range(my_list[i]):
+            if k == 0:
+                # makes them staggered with j%2
+                one_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+            elif k == 1:
+                two_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+            elif k == 2:
+                three_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 100) + 30 * (j % 2)))
 
 
 """game loop"""
@@ -98,6 +120,13 @@ while run:
     screen.blit(bgs[level - 1], (0, 0))
     # draws the banner 200 from bottom because that is the height of the image
     screen.blit(banners[level - 1], (0, HEIGHT - 200))
+
+    if level == 1:
+        draw_level(one_coords)
+    elif level == 2:
+        draw_level(two_coords)
+    elif level == 3:
+        draw_level(three_coords)
 
     if level > 0:
         draw_gun()
