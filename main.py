@@ -27,6 +27,14 @@ targets = {1: [10, 5, 3],
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
 level = 2
 NUMBER_OF_LEVELS = 3
+points = 0
+shoot = False
+total_shots = 0
+modes = {'freeplay': 0,
+         'accuracy': 1,
+         'timed': 2}
+mode = 0
+# ammo = 0
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
 for i in range(1, NUMBER_OF_LEVELS + 1):
@@ -106,6 +114,22 @@ def draw_level(coords):
     return target_rects
 
 
+def check_shot(targets, coords):
+    # targets is the target_rects list created in draw_level
+    global points
+    mouse_pos = pygame.mouse.get_pos()
+    for i in range(len(targets)):
+        for j in range(len(targets[i])):
+            if targets[i][j].collidepoint(mouse_pos):
+                # removes target from coords list
+                coords[i].pop(j)
+                # sets scoring system
+                points += 10 + 10 * (i**2)
+                # TODO add sounds for enemy hit
+    return coords
+
+
+
 # initialize enemy coordinates
 # variate from tutorial so may cause errors
 # TODO make the number of lists in the list depend on number of targets
@@ -139,12 +163,21 @@ while run:
     if level == 1:
         target_boxes = draw_level(one_coords)
         one_coords = move_level(one_coords)
+        if shoot:
+            one_coords = check_shot(target_boxes, one_coords)
+            shot = False
     elif level == 2:
         target_boxes = draw_level(two_coords)
         two_coords = move_level(two_coords)
+        if shoot:
+            two_coords = check_shot(target_boxes, two_coords)
+            shot = False
     elif level == 3:
         target_boxes = draw_level(three_coords)
         three_coords = move_level(three_coords)
+        if shoot:
+            three_coords = check_shot(target_boxes, three_coords)
+            shot = False
 
     if level > 0:
         draw_gun()
@@ -152,6 +185,12 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            mouse_position = pygame.mouse.get_pos()
+            if (0 < mouse_position[0] < WIDTH) and (0 < mouse_position[1] < HEIGHT - 200):
+                shot = True
+                total_shots += 1
+                # TODO make an amo variabel dependent on if in the
 
     pygame.display.flip()
 
