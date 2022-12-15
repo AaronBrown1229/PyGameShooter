@@ -25,10 +25,10 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
-level = 2
+level = 3
 NUMBER_OF_LEVELS = 3
 points = 0
-shoot = False
+shot = False
 total_shots = 0
 modes = {'freeplay': 0,
          'accuracy': 1,
@@ -102,9 +102,14 @@ def move_level(coords):
 
 
 def draw_level(coords):
-    target_numbers = NUMBER_OF_TARGETS_ARRAY[level - 1]
-    # target hit box
-    target_rects = [[]] * target_numbers
+    # target_numbers = NUMBER_OF_TARGETS_ARRAY[level - 1]
+    # # target hit box
+    # target_rects = [[]] * target_numbers
+    # TODO make the above code work and replace the if statements bellow
+    if level == 1 or level == 2:
+        target_rects = [[], [], []]
+    else:
+        target_rects = [[], [], [], []]
     # x loop
     for i in range(len(coords)):
         # y loop
@@ -127,7 +132,6 @@ def check_shot(targets, coords):
                 points += 10 + 10 * (i**2)
                 # TODO add sounds for enemy hit
     return coords
-
 
 
 # initialize enemy coordinates
@@ -163,19 +167,19 @@ while run:
     if level == 1:
         target_boxes = draw_level(one_coords)
         one_coords = move_level(one_coords)
-        if shoot:
+        if shot:
             one_coords = check_shot(target_boxes, one_coords)
             shot = False
     elif level == 2:
         target_boxes = draw_level(two_coords)
         two_coords = move_level(two_coords)
-        if shoot:
+        if shot:
             two_coords = check_shot(target_boxes, two_coords)
             shot = False
     elif level == 3:
         target_boxes = draw_level(three_coords)
         three_coords = move_level(three_coords)
-        if shoot:
+        if shot:
             three_coords = check_shot(target_boxes, three_coords)
             shot = False
 

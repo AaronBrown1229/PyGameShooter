@@ -60,6 +60,15 @@
    - returns new coords
 2. called move cords after draw board and updated the appropriate coordinate set
 
+## making shots
+1. made new function called draw_level
+   - it takes the targets and coords as arguments
+   - if the mouse is position is on the hit box of a target the target is removed from the coords
+   - increases the points
+   - returns coords
+2. made an if statement in each level's if statement that will run check_shot if a click occurred
+3. made another event handler to set shot to true when the mouse is clicked
+
 # Things learned
 1. can't make a list of lists by multipling
    - ie. can't do `x = [[]] * 3`
