@@ -18,6 +18,11 @@ screen = pygame.display.set_mode([WIDTH, HEIGHT])
 bgs = []
 banners = []
 guns = []
+target_images = [[]] * 3
+# dictionary contain the number of each enemy difficulty to create on each level
+targets = {1: [10, 5, 3],
+           2: [12, 8, 5],
+           3: [15, 12, 8, 3]}
 level = 1
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
@@ -26,6 +31,17 @@ for i in range(1, 4):
     banners.append(pygame.image.load(f'assets/banners/{i}.png'))
     # makes gun smaller
     guns.append(pygame.transform.scale(pygame.image.load(f'assets/guns/{i}.png'), (100, 100)))
+    # loads the targets
+    if i <= 2:
+        # for target in folder
+        for j in range(1, 4):
+            # will make images smaller for each level
+            target_images[i-1].append(pygame.transform.scale(pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
+    else:
+        # for the third level because it has 4 targets
+        for j in range(1, 5):
+            # will make images smaller for each level
+            target_images[i-1].append(pygame.transform.scale(pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
 
 
 def draw_gun():
