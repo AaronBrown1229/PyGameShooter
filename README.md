@@ -31,7 +31,7 @@ Title screen and end game screen will be created
 - [x] 5. make gun rotate based on mouse position
 - [x] 6. add enemy into game 
 - [x] 7. procedurally generate enemy starting location
-- [] 8. make enemy move with progressive difficulty
+- [x] 8. make enemy move with progressive difficulty
 - [] 9. check if mouse click collides with enemy when shoot
 - [] 10. advance level when all enemies are dead
 - [] 11. draw scoring and status elements

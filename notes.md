@@ -51,3 +51,15 @@
 2. made a dictionary that contains the number of each type to put on each level
 3. made a draw level function that will place targets at the specified coords handed to it
 4. made the initial cord for each level
+
+## making targets move
+1. made a new function called move_level
+   - it takes coords as a argument
+   - will move the target to the other side of the screen if off scree
+   - if still on screen shift over at a rate dependent on level of target
+   - returns new coords
+2. called move cords after draw board and updated the appropriate coordinate set
+
+# Things learned
+1. can't make a list of lists by multipling
+   - ie. can't do `x = [[]] * 3`

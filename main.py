@@ -80,6 +80,19 @@ def draw_gun():
                 pygame.draw.circle(screen, lasers[level - 1], mouse_pos, 5)
 
 
+"""make the targets move horizontal across the screen with different speeds"""
+def move_level(coords):
+    for i in range(NUMBER_OF_TARGETS_ARRAY[level - 1]):
+        for j in range(len(coords[i])):
+            my_coords = coords[i][j]
+            # if at end of screen
+            if my_coords[0] < -150:
+                coords[i][j] = WIDTH, my_coords[1]
+            else:
+                coords[i][j] = (my_coords[0] - 2**i, my_coords[1])
+    return coords
+
+
 def draw_level(coords):
     target_numbers = NUMBER_OF_TARGETS_ARRAY[level - 1]
     # target hit box
@@ -124,11 +137,14 @@ while run:
     screen.blit(banners[level - 1], (0, HEIGHT - 200))
 
     if level == 1:
-        draw_level(one_coords)
+        target_boxes = draw_level(one_coords)
+        one_coords = move_level(one_coords)
     elif level == 2:
-        draw_level(two_coords)
+        target_boxes = draw_level(two_coords)
+        two_coords = move_level(two_coords)
     elif level == 3:
-        draw_level(three_coords)
+        target_boxes = draw_level(three_coords)
+        three_coords = move_level(three_coords)
 
     if level > 0:
         draw_gun()
