@@ -18,13 +18,13 @@ screen = pygame.display.set_mode([WIDTH, HEIGHT])
 bgs = []
 banners = []
 guns = []
-target_images = [[]] * 3
+target_images = [[], [], []]
 # dictionary contain the number of each enemy difficulty to create on each level
 targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
-level = 2
+level = 3
 NUMBER_OF_LEVELS = 3
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
@@ -80,9 +80,9 @@ def draw_gun():
 
 
 def draw_level(coords):
-    number_of_targets = NUMBER_OF_TARGETS_ARRAY[level - 1]
+    target_numbers = NUMBER_OF_TARGETS_ARRAY[level - 1]
     # target hit box
-    target_rects = [[]] * number_of_targets
+    target_rects = [[]] * target_numbers
     # x loop
     for i in range(len(coords)):
         # y loop
@@ -94,9 +94,24 @@ def draw_level(coords):
 
 # initialize enemy coordinates
 # variate from tutorial so may cause errors
-one_coords = [[]] * NUMBER_OF_TARGETS_ARRAY[0]
-two_coords = [[]] * NUMBER_OF_TARGETS_ARRAY[1]
-three_coords = [[]] * NUMBER_OF_TARGETS_ARRAY[2]
+# one_coords = [[], [], []]
+# two_coords = [[], [], []]
+# three_coords = [[], [], [], []]
+# for i in range(3):
+#     my_list = targets[1]
+#     for j in range(my_list[i]):
+#         one_coords[i].append((WIDTH // (my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+# for i in range(3):
+#     my_list = targets[2]
+#     for j in range(my_list[i]):
+#         two_coords[i].append((WIDTH // (my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+# for i in range(4):
+#     my_list = targets[3]
+#     for j in range(my_list[i]):
+#         three_coords[i].append((WIDTH // (my_list[i]) * j, 300 - (i * 100) + 30 * (j % 2)))
+one_coords = [[], [], []]
+two_coords = [[], [], []]
+three_coords = [[], [], [], []]
 for k in range(NUMBER_OF_LEVELS):
     for i in range(NUMBER_OF_TARGETS_ARRAY[k]):
         my_list = targets[k+1]
@@ -105,9 +120,9 @@ for k in range(NUMBER_OF_LEVELS):
                 # makes them staggered with j%2
                 one_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
             elif k == 1:
-                two_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+                two_coords[i].append((WIDTH//(my_list[i]) * j, 200 - (i * 150) + 30 * (j % 2)))
             elif k == 2:
-                three_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 100) + 30 * (j % 2)))
+                three_coords[i].append((WIDTH//(my_list[i]) * j, 100 - (i * 100) + 30 * (j % 2)))
 
 
 """game loop"""
