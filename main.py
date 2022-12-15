@@ -24,24 +24,22 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 level = 1
+NUMBER_OF_LEVELS = 3
+NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
-for i in range(1, 4):
+for i in range(1, NUMBER_OF_LEVELS + 1):
     bgs.append(pygame.image.load(f'assets/bgs/{i}.png'))
     banners.append(pygame.image.load(f'assets/banners/{i}.png'))
     # makes gun smaller
     guns.append(pygame.transform.scale(pygame.image.load(f'assets/guns/{i}.png'), (100, 100)))
     # loads the targets
-    if i <= 2:
-        # for target in folder
-        for j in range(1, 4):
-            # will make images smaller for each level
-            target_images[i-1].append(pygame.transform.scale(pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
-    else:
-        # for the third level because it has 4 targets
-        for j in range(1, 5):
-            # will make images smaller for each level
-            target_images[i-1].append(pygame.transform.scale(pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
+    number_of_targets = NUMBER_OF_TARGETS_ARRAY[i]
+    # for target in folder
+    for j in range(1, number_of_targets + 1):
+        # will make images smaller for each level
+        target_images[i-1].append(pygame.transform.scale(
+            pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
 
 
 def draw_gun():
@@ -79,6 +77,15 @@ def draw_gun():
             if clicks[0]:
                 # draws a small circle with radius 5 to check if mouse clicks are registered
                 pygame.draw.circle(screen, lasers[level - 1], mouse_pos, 5)
+
+
+def draw_level():
+    if level == 1 or level ==2:
+        # target hit box
+        target_rects = [[]] * 3
+    else:
+        # for level 3 because it has 4 enemies
+        target_rects = [[]] * 4
 
 
 """game loop"""
