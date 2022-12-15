@@ -1,4 +1,4 @@
-# order of operaations
+# order of operations
 ## initial git setup
 1. created github repo
 2. made ReadMe file
