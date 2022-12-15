@@ -34,7 +34,7 @@
 5. drew the background and banner
 6. made an end game condition based on pygame.QUIT
 7. made screen redraw using flip
-8. outside while loop caled quit() to end program
+8. outside while loop called quit() to end program
 
 ## drawing gun
 1. made a new function called draw gun
@@ -45,3 +45,9 @@
 6. made it for gun inverses if on left side of screen
 7. made it detect clicks and draw circles at the mouse if click happens
 8. made gun scale down when imported
+
+## setting starting positions of all targets
+1. loaded the target images using a for loop and stored them in a list of lists, each inner list represents a level
+2. made a dictionary that contains the number of each type to put on each level
+3. made a draw level function that will place targets at the specified coords handed to it
+4. made the initial cord for each level
