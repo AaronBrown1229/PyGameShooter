@@ -35,8 +35,8 @@ Title screen and end game screen will be created
 - [x] 9. check if mouse click collides with enemy when shoot
 - [x] 10. advance level when all enemies are dead
 - [x] 11. draw scoring and status elements
-- [] 12. navigate to other screens
-- [] 13. handle game over conditions
-- [] 14. handle reading and writing high scores
+- [x] 12. navigate to other screens
+- [x] 13. handle game over conditions
+- [x] 14. handle reading and writing high scores
 - [] 15. add background music
 - [] 16. add sound effects 

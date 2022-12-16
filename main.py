@@ -71,6 +71,14 @@ for i in range(1, NUMBER_OF_LEVELS + 1):
         target_images[i-1].append(pygame.transform.scale(
             pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
 
+file = open('high_scores.txt', 'r')
+read_file = file.readlines()
+file.close()
+
+best_freeplay = int(read_file[modes['freeplay']])
+best_ammo = int(read_file[modes['accuracy']])
+best_time = int(read_file[modes['timed']])
+
 
 def draw_menu():
     global game_over, pause, mode, level, counter, total_shots, points, modes, menu
@@ -139,7 +147,8 @@ def draw_game_over():
     screen.blit(font.render(f'{points}', True, 'black'), (640, 595))
 
     if exit_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
-        pygame.quit()
+        global run
+        run = False
     if menu_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         level = 0
         menu = True
@@ -392,6 +401,11 @@ while run:
         elif mode == modes['timed'] and points > best_time:
             best_time = points
             write_values = True
+
+    # used to write the values to the file
+    if write_values:
+        file = open("high_scores.txt", "w")
+        file.write(f"{best_freeplay }\n {best_ammo}\n {best_time}")
 
     pygame.display.flip()
 
