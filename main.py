@@ -78,6 +78,7 @@ def draw_menu():
     game_over = False
     pause = False
     screen.blit(menu_img, (0, 0))
+    create_coords()
 
     # stuff for the buttons
     mouse_pos = pygame.mouse.get_pos()
@@ -126,7 +127,26 @@ def draw_menu():
 
 
 def draw_game_over():
-    pass
+    global points, clicked, level, menu, total_shots, time_passed
+    screen.blit(game_over_img, (0, 0))
+    mouse_pos = pygame.mouse.get_pos()
+    clicks = pygame.mouse.get_pressed()
+
+    # creates hit boxes
+    exit_button = pygame.rect.Rect((170, 661), (260, 100))
+    menu_button = pygame.rect.Rect((475, 661), (260, 100))
+
+    screen.blit(font.render(f'{points}', True, 'black'), (640, 595))
+
+    if exit_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        pygame.quit()
+    if menu_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        level = 0
+        menu = True
+        points = 0
+        total_shots = 0
+        time_passed = 0
+        clicked = True
 
 
 def draw_pause():
@@ -260,22 +280,24 @@ def check_shot(targets, coords):
 # initialize enemy coordinates
 # variate from tutorial so may cause errors
 # TODO make the number of lists in the list depend on number of targets
-one_coords = [[], [], []]
-two_coords = [[], [], []]
-three_coords = [[], [], [], []]
-for k in range(NUMBER_OF_LEVELS):
-    for i in range(NUMBER_OF_TARGETS_ARRAY[k]):
-        my_list = targets[k+1]
-        for j in range(my_list[i]):
-            if k == 0:
-                # makes them staggered with j%2
-                one_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
-            elif k == 1:
-                two_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
-            elif k == 2:
-                three_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 100) + 30 * (j % 2)))
+def create_coords():
+    global one_coords, two_coords, three_coords, NUMBER_OF_LEVELS, NUMBER_OF_TARGETS_ARRAY, targets, WIDTH
+    one_coords = [[], [], []]
+    two_coords = [[], [], []]
+    three_coords = [[], [], [], []]
+    for k in range(NUMBER_OF_LEVELS):
+        for i in range(NUMBER_OF_TARGETS_ARRAY[k]):
+            my_list = targets[k+1]
+            for j in range(my_list[i]):
+                if k == 0:
+                    # makes them staggered with j%2
+                    one_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+                elif k == 1:
+                    two_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 150) + 30 * (j % 2)))
+                elif k == 2:
+                    three_coords[i].append((WIDTH//(my_list[i]) * j, 300 - (i * 100) + 30 * (j % 2)))
 
-
+create_coords()
 """game loop"""
 run = True
 while run:
@@ -355,7 +377,21 @@ while run:
         level_shots = -1 * (ammo[level - 1] - level_shots)
         time_passed = 0
         level += 1
-
+    # handles end game
+    elif (level == NUMBER_OF_LEVELS and target_boxes == [[], [], [], []])\
+            or (mode == modes['accuracy'] and level_shots == ammo[level - 1])\
+            or (mode == modes['timed'] and time_passed == level_time[level - 1]):
+        game_over = True
+        if mode == modes['freeplay']:
+            if time_passed < best_freeplay or best_freeplay == 0:
+                best_freeplay = time_passed
+                write_values = True
+        elif mode == modes['accuracy'] and points > best_ammo:
+            best_ammo = points
+            write_values = True
+        elif mode == modes['timed'] and points > best_time:
+            best_time = points
+            write_values = True
 
     pygame.display.flip()
 

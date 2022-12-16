@@ -80,3 +80,4 @@
 # Things learned
 1. can't make a list of lists by multipling
    - ie. can't do `x = [[]] * 3`
+2. \ is a new line char allowing for statements to take up multiple lines
