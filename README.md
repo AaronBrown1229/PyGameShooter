@@ -33,7 +33,7 @@ Title screen and end game screen will be created
 - [x] 7. procedurally generate enemy starting location
 - [x] 8. make enemy move with progressive difficulty
 - [x] 9. check if mouse click collides with enemy when shoot
-- [] 10. advance level when all enemies are dead
+- [x] 10. advance level when all enemies are dead
 - [] 11. draw scoring and status elements
 - [] 12. navigate to other screens
 - [] 13. handle game over conditions

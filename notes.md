@@ -69,6 +69,10 @@
 2. made an if statement in each level's if statement that will run check_shot if a click occurred
 3. made another event handler to set shot to true when the mouse is clicked
 
+## advance level when all enemy are dead
+1. made a simple if statement at end of run loop that checks if there are anymore target boxes
+2. if there are no more target boxes and the level is less than number of levels advance
+
 # Things learned
 1. can't make a list of lists by multipling
    - ie. can't do `x = [[]] * 3`

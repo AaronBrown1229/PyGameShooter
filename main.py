@@ -25,7 +25,7 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
-level = 3
+level = 1
 NUMBER_OF_LEVELS = 3
 points = 0
 shot = False
@@ -194,7 +194,12 @@ while run:
             if (0 < mouse_position[0] < WIDTH) and (0 < mouse_position[1] < HEIGHT - 200):
                 shot = True
                 total_shots += 1
-                # TODO make an amo variabel dependent on if in the
+                # TODO make an ammo variable dependent on if in the
+
+    # used to change to new level
+    # TODO make the boxes multiply
+    if target_boxes == [[], [], []] and level < NUMBER_OF_LEVELS:
+        level += 1
 
     pygame.display.flip()
 
