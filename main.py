@@ -25,7 +25,7 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
-level = 1
+level = 3
 NUMBER_OF_LEVELS = 3
 points = 0
 shot = False
@@ -33,8 +33,10 @@ total_shots = 0
 modes = {'freeplay': 0,
          'accuracy': 1,
          'timed': 2}
-mode = 0
-# ammo = 0
+mode = 2
+time_passed = 0
+ammo = [27, 22.5, 40]
+level_time = [100, 100, 200]
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
 for i in range(1, NUMBER_OF_LEVELS + 1):
@@ -49,6 +51,24 @@ for i in range(1, NUMBER_OF_LEVELS + 1):
         # will make images smaller for each level
         target_images[i-1].append(pygame.transform.scale(
             pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
+
+
+def draw_score():
+    # creates texts that is ready to be placed on screen, the true value is for anti aliasing
+    points_text = font.render(f'Points: {points}', True, 'black')
+    screen.blit(points_text, (320, 660))
+    shots_text = font.render(f'Total Shots: {total_shots}', True, 'black')
+    screen.blit(shots_text, (320, 687))
+    time_text = font.render(f'Time Elapsed: {time_passed}', True, 'black')
+    screen.blit(time_text, (320, 714))
+    if mode == modes['freeplay']:
+        mode_text = font.render(f'Freeplay!', True, 'black')
+    elif mode == modes['accuracy']:
+        mode_text = font.render(f'Ammo Remaining: {ammo[level - 1] - total_shots}', True, 'black')
+    elif mode == modes['timed']:
+        mode_text = font.render(f'Time Remaining: {level_time[level - 1] - time_passed}', True, 'black')
+    screen.blit(mode_text, (320, 741))
+
 
 
 def draw_gun():
@@ -185,6 +205,7 @@ while run:
 
     if level > 0:
         draw_gun()
+        draw_score()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
