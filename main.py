@@ -1,3 +1,6 @@
+# TODO make all global variables get handed into the functions
+# TODO make more things functions
+# TODO make multiple files
 import pygame
 import math
 
@@ -25,7 +28,7 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
-level = 1
+level = 0
 NUMBER_OF_LEVELS = 3
 points = 0
 shot = False
@@ -34,12 +37,23 @@ level_shots = 0
 modes = {'freeplay': 0,
          'accuracy': 1,
          'timed': 2}
-mode = 1
+mode = 0
 time_passed = 0
 ammo = [27, 22, 38]
 # values are in seconds
 level_time = [20, 15, 25]
 counter = 1
+menu = True
+game_over = False
+pause = False
+menu_img = pygame.image.load('assets/menus/mainMenu.png')
+game_over_img = pygame.image.load('assets/menus/mainMenu.png')
+pause_img = pygame.image.load('assets/menus/mainMenu.png')
+best_freeplay = 0
+best_ammo = 0
+best_time = 0
+write_values = False
+target_boxes = None
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
 for i in range(1, NUMBER_OF_LEVELS + 1):
@@ -56,11 +70,69 @@ for i in range(1, NUMBER_OF_LEVELS + 1):
             pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
 
 
+def draw_menu():
+    global game_over, pause, mode, level, counter, total_shots, points, modes, menu
+    global best_freeplay, best_ammo, best_time, write_values
+    game_over = False
+    pause = False
+    clicked = False
+    screen.blit(menu_img, (0, 0))
+
+    # stuff for the buttons
+    mouse_pos = pygame.mouse.get_pos()
+    clicks = pygame.mouse.get_pressed()
+    freeplay_button = pygame.rect.Rect((170, 524), (260, 100))
+    ammo_button = pygame.rect.Rect((475, 524), (260, 100))
+    timed_button = pygame.rect.Rect((170, 661), (260, 100))
+    reset_button = pygame.rect.Rect((475, 661), (260, 100))
+
+    # rendering previous scores
+    screen.blit(font.render(f'{best_freeplay}', True, 'black'), (340, 580))
+    screen.blit(font.render(f'{best_ammo}', True, 'black'), (650, 580))
+    screen.blit(font.render(f'{best_time}', True, 'black'), (350, 710))
+
+    # checking for button presses
+    if freeplay_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        mode = modes['freeplay']
+        level = 1
+        counter = 0
+        total_shots = 0
+        points = 0
+        menu = False
+    if ammo_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        mode = modes['accuracy']
+        level = 1
+        counter = 0
+        total_shots = 0
+        points = 0
+        menu = False
+    if timed_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        mode = modes['timed']
+        level = 1
+        counter = 0
+        total_shots = 0
+        points = 0
+        menu = False
+    if reset_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        best_freeplay = 0
+        best_ammo = 0
+        best_time = 0
+        write_values = True
+
+
+def draw_game_over():
+    pass
+
+
+def draw_pause():
+    pass
+
+
 def draw_score():
     # creates texts that is ready to be placed on screen, the true value is for anti aliasing
     points_text = font.render(f'Points: {points}', True, 'black')
     screen.blit(points_text, (320, 660))
-    shots_text = font.render(f'Total Shots: {total_shots}', True, 'black')
+    shots_text = font.render(f'Shots Taken: {total_shots}', True, 'black')
     screen.blit(shots_text, (320, 687))
     time_text = font.render(f'Time Elapsed: {time_passed}', True, 'black')
     screen.blit(time_text, (320, 714))
@@ -70,6 +142,8 @@ def draw_score():
         mode_text = font.render(f'Ammo Remaining: {ammo[level - 1] - level_shots}', True, 'black')
     elif mode == modes['timed']:
         mode_text = font.render(f'Time Remaining: {level_time[level - 1] - time_passed}', True, 'black')
+    else:
+        mode_text = font.render(f'ERROR', True, 'black')
     screen.blit(mode_text, (320, 741))
 
 
@@ -187,25 +261,36 @@ while run:
     # draws the banner 200 from bottom because that is the height of the image
     screen.blit(banners[level - 1], (0, HEIGHT - 200))
 
-    if level == 1:
-        target_boxes = draw_level(one_coords)
-        one_coords = move_level(one_coords)
-        if shot:
-            one_coords = check_shot(target_boxes, one_coords)
-            shot = False
-    elif level == 2:
-        target_boxes = draw_level(two_coords)
-        two_coords = move_level(two_coords)
-        if shot:
-            two_coords = check_shot(target_boxes, two_coords)
-            shot = False
-    elif level == 3:
-        target_boxes = draw_level(three_coords)
-        three_coords = move_level(three_coords)
-        if shot:
-            three_coords = check_shot(target_boxes, three_coords)
-            shot = False
+    if menu:
+        level = 0
+        draw_menu()
+    elif game_over:
+        level = 0
+        draw_game_over()
+    elif pause:
+        level = 0
+        draw_pause()
+    else:
+        if level == 1:
+            target_boxes = draw_level(one_coords)
+            one_coords = move_level(one_coords)
+            if shot:
+                one_coords = check_shot(target_boxes, one_coords)
+                shot = False
+        elif level == 2:
+            target_boxes = draw_level(two_coords)
+            two_coords = move_level(two_coords)
+            if shot:
+                two_coords = check_shot(target_boxes, two_coords)
+                shot = False
+        elif level == 3:
+            target_boxes = draw_level(three_coords)
+            three_coords = move_level(three_coords)
+            if shot:
+                three_coords = check_shot(target_boxes, three_coords)
+                shot = False
 
+    # TODO put this in the above else statement and remove the if statement
     if level > 0:
         draw_gun()
         draw_score()
@@ -216,7 +301,6 @@ while run:
         else:
             counter = 1
             time_passed += 1
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -231,7 +315,7 @@ while run:
 
     # used to change to new level
     # TODO make the boxes multiply
-    if target_boxes == [[], [], []] and level < NUMBER_OF_LEVELS:
+    if target_boxes == [[], [], []] and 0 < level < NUMBER_OF_LEVELS:
         level_shots = -1 * (ammo[level - 1] - level_shots)
         time_passed = 0
         level += 1
