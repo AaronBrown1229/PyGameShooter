@@ -47,13 +47,15 @@ menu = True
 game_over = False
 pause = False
 menu_img = pygame.image.load('assets/menus/mainMenu.png')
-game_over_img = pygame.image.load('assets/menus/mainMenu.png')
-pause_img = pygame.image.load('assets/menus/mainMenu.png')
+game_over_img = pygame.image.load('assets/menus/pause.png')
+pause_img = pygame.image.load('assets/menus/gameOver.png')
 best_freeplay = 0
 best_ammo = 0
 best_time = 0
+clicked = False
 write_values = False
 target_boxes = None
+resume_level = level
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
 for i in range(1, NUMBER_OF_LEVELS + 1):
@@ -72,10 +74,9 @@ for i in range(1, NUMBER_OF_LEVELS + 1):
 
 def draw_menu():
     global game_over, pause, mode, level, counter, total_shots, points, modes, menu
-    global best_freeplay, best_ammo, best_time, write_values
+    global best_freeplay, best_ammo, best_time, write_values,clicked
     game_over = False
     pause = False
-    clicked = False
     screen.blit(menu_img, (0, 0))
 
     # stuff for the buttons
@@ -99,6 +100,7 @@ def draw_menu():
         total_shots = 0
         points = 0
         menu = False
+        clicked = True
     if ammo_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         mode = modes['accuracy']
         level = 1
@@ -106,6 +108,7 @@ def draw_menu():
         total_shots = 0
         points = 0
         menu = False
+        clicked = True
     if timed_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         mode = modes['timed']
         level = 1
@@ -113,11 +116,13 @@ def draw_menu():
         total_shots = 0
         points = 0
         menu = False
+        clicked = True
     if reset_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         best_freeplay = 0
         best_ammo = 0
         best_time = 0
         write_values = True
+        clicked = True
 
 
 def draw_game_over():
@@ -125,7 +130,28 @@ def draw_game_over():
 
 
 def draw_pause():
-    pass
+    global menu, level, pause, resume_level, clicked, points, total_shots, time_passed, level_shots
+    screen.blit(pause_img, (0, 0))
+    mouse_pos = pygame.mouse.get_pos()
+    clicks = pygame.mouse.get_pressed()
+
+    # creates hit boxes
+    resume_button = pygame.rect.Rect((170, 661), (260, 100))
+    menu_button = pygame.rect.Rect((475, 661), (260, 100))
+
+    # checks if clicked
+    if resume_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        level = resume_level
+        pause = False
+    if menu_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        level = 0
+        pause = False
+        menu = True
+        points = 0
+        total_shots = 0
+        time_passed = 0
+        clicked = True
+        level_shots = 0
 
 
 def draw_score():
@@ -311,7 +337,17 @@ while run:
                 shot = True
                 total_shots += 1
                 level_shots += 1
-                # TODO make an ammo variable dependent on if in the
+            elif (670 < mouse_position[0] < 860) and (660 < mouse_position[1] < 715):
+                resume_level = level
+                pause = True
+                clicked = True
+            elif (670 < mouse_position[0] < 860) and (715 < mouse_position[1] < 760):
+                menu = True
+                level_shots = 0
+                clicked = True
+                level = 0
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and clicked:
+            clicked = False
 
     # used to change to new level
     # TODO make the boxes multiply
