@@ -75,6 +75,17 @@ file = open('high_scores.txt', 'r')
 read_file = file.readlines()
 file.close()
 
+# for the sounds
+pygame.mixer.init()
+pygame.mixer.music.load('assets/sounds/bg_music.mp3')
+plate_sound = pygame.mixer.Sound('assets/sounds/Broken plates.wav')
+plate_sound.set_volume(.2)
+Drill_sound = pygame.mixer.Sound('assets/sounds/Drill Gear.mp3')
+Drill_sound.set_volume(.2)
+laser_sound = pygame.mixer.Sound('assets/sounds/laser Gun.wav')
+Drill_sound.set_volume(.2)
+pygame.mixer.music.play()
+
 best_freeplay = int(read_file[modes['freeplay']])
 best_ammo = int(read_file[modes['accuracy']])
 best_time = int(read_file[modes['timed']])
