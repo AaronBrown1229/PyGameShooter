@@ -82,8 +82,10 @@ plate_sound = pygame.mixer.Sound('assets/sounds/Broken plates.wav')
 plate_sound.set_volume(.2)
 Drill_sound = pygame.mixer.Sound('assets/sounds/Drill Gear.mp3')
 Drill_sound.set_volume(.2)
-laser_sound = pygame.mixer.Sound('assets/sounds/laser Gun.wav')
+laser_sound = pygame.mixer.Sound('assets/sounds/Laser Gun.wav')
 Drill_sound.set_volume(.2)
+fart_sound = pygame.mixer.Sound('assets/sounds/Fart Toot.wav')
+fart_sound.set_volume(.2)
 pygame.mixer.music.play()
 
 best_freeplay = int(read_file[modes['freeplay']])
@@ -293,7 +295,13 @@ def check_shot(targets, coords):
                 coords[i].pop(j)
                 # sets scoring system
                 points += 10 + 10 * (i**2)
-                # TODO add sounds for enemy hit
+                if level == 1:
+                    Drill_sound.play()
+                elif level == 2:
+                    plate_sound.play()
+                elif level == 3:
+                    fart_sound.play()
+    laser_sound.play()
     return coords
 
 
