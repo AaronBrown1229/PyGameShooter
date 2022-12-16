@@ -34,7 +34,7 @@ Title screen and end game screen will be created
 - [x] 8. make enemy move with progressive difficulty
 - [x] 9. check if mouse click collides with enemy when shoot
 - [x] 10. advance level when all enemies are dead
-- [] 11. draw scoring and status elements
+- [x] 11. draw scoring and status elements
 - [] 12. navigate to other screens
 - [] 13. handle game over conditions
 - [] 14. handle reading and writing high scores

@@ -73,6 +73,10 @@
 1. made a simple if statement at end of run loop that checks if there are anymore target boxes
 2. if there are no more target boxes and the level is less than number of levels advance
 
+## draw text on score card
+1. made function draw_score that will draw all the required stuff depending on mode
+2. made a timer
+
 # Things learned
 1. can't make a list of lists by multipling
    - ie. can't do `x = [[]] * 3`
