@@ -1,3 +1,4 @@
 ShootingGallery/
 venv/
 .idea/
+__pycache__/
