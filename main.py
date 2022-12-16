@@ -25,18 +25,21 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 NUMBER_OF_TARGETS_ARRAY = [3, 3, 4]
-level = 3
+level = 1
 NUMBER_OF_LEVELS = 3
 points = 0
 shot = False
 total_shots = 0
+level_shots = 0
 modes = {'freeplay': 0,
          'accuracy': 1,
          'timed': 2}
-mode = 2
+mode = 1
 time_passed = 0
-ammo = [27, 22.5, 40]
-level_time = [100, 100, 200]
+ammo = [27, 22, 38]
+# values are in seconds
+level_time = [20, 15, 25]
+counter = 1
 # used to populate the asset lists with images
 # range is 1,4 because there are three levels
 for i in range(1, NUMBER_OF_LEVELS + 1):
@@ -64,7 +67,7 @@ def draw_score():
     if mode == modes['freeplay']:
         mode_text = font.render(f'Freeplay!', True, 'black')
     elif mode == modes['accuracy']:
-        mode_text = font.render(f'Ammo Remaining: {ammo[level - 1] - total_shots}', True, 'black')
+        mode_text = font.render(f'Ammo Remaining: {ammo[level - 1] - level_shots}', True, 'black')
     elif mode == modes['timed']:
         mode_text = font.render(f'Time Remaining: {level_time[level - 1] - time_passed}', True, 'black')
     screen.blit(mode_text, (320, 741))
@@ -206,6 +209,14 @@ while run:
     if level > 0:
         draw_gun()
         draw_score()
+        # the tick command above makes this run at 60 fps so each loop is 1/60 a second
+        # therefore this works as a clock
+        if counter < 60:
+            counter += 1
+        else:
+            counter = 1
+            time_passed += 1
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -215,12 +226,16 @@ while run:
             if (0 < mouse_position[0] < WIDTH) and (0 < mouse_position[1] < HEIGHT - 200):
                 shot = True
                 total_shots += 1
+                level_shots += 1
                 # TODO make an ammo variable dependent on if in the
 
     # used to change to new level
     # TODO make the boxes multiply
     if target_boxes == [[], [], []] and level < NUMBER_OF_LEVELS:
+        level_shots = -1 * (ammo[level - 1] - level_shots)
+        time_passed = 0
         level += 1
+
 
     pygame.display.flip()
 
